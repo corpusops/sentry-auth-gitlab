@@ -14,14 +14,13 @@ class GitLabApiError(Exception):
 
 
 class GitLabClient(object):
-    http = http.build_session()
-
     def _request(self, path, access_token):
+        session = http.build_session()
         headers = {'Authorization': 'Bearer {0}'.format(access_token)}
         url = '{0}/{1}'.format(API_BASE_URL, path.lstrip('/'))
 
         try:
-            req = self.http.get(url, headers=headers)
+            req = session.get(url, headers=headers)
         except RequestException as e:
             raise GitLabApiError(unicode(e), status=e.status_code)
         return json.loads(req.content)
