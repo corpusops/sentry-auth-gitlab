@@ -22,7 +22,7 @@ class GitLabClient(object):
         try:
             req = session.get(url, headers=headers)
         except RequestException as e:
-            raise GitLabApiError(unicode(e), status=e.status_code)
+            raise GitLabApiError(unicode(e), status=getattr(e, 'status_code', None))
         return json.loads(req.content)
 
     def get_user(self, access_token):
